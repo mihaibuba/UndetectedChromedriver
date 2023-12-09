@@ -1,6 +1,4 @@
-package com.frogking.chromedriver;
-
-import org.checkerframework.checker.regex.qual.Regex;
+package technology.visionarysoftware.chromedriver;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -12,17 +10,17 @@ public class Patcher {
 
     private String _driverExecutablePath;
 
-    public Patcher(String _driverExecutablePath){
+    public Patcher(String _driverExecutablePath) {
         this._driverExecutablePath = _driverExecutablePath;
     }
 
     public void Auto() throws Exception {
-        if (!isBinaryPatched()){
+        if (!isBinaryPatched()) {
             patchExe();
         }
     }
 
-    private boolean isBinaryPatched() throws Exception{
+    private boolean isBinaryPatched() throws Exception {
         if (_driverExecutablePath == null) {
             throw new RuntimeException("driverExecutablePath is required.");
         }
@@ -40,13 +38,13 @@ public class Patcher {
                 }
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(br!=null){
-                try{
+        } finally {
+            if (br != null) {
+                try {
                     br.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -54,7 +52,7 @@ public class Patcher {
         return false;
     }
 
-    private int patchExe(){
+    private int patchExe() {
 
         int linect = 0;
         String replacement = genRandomCdc();
@@ -65,19 +63,21 @@ public class Patcher {
             byte[] buffer = new byte[1024];
             StringBuilder stringBuilder = new StringBuilder();
             long read = 0;
-            while(true){
-                read = file.read(buffer,0,buffer.length);
-                if(read == 0 || read == -1){
+            while (true) {
+                read = file.read(buffer, 0, buffer.length);
+                if (read == 0 || read == -1) {
                     break;
                 }
-                stringBuilder.append(new String(buffer,0,(int)read,StandardCharsets.ISO_8859_1));
+                stringBuilder.append(
+                        new String(buffer, 0, (int) read, StandardCharsets.ISO_8859_1));
             }
             String content = stringBuilder.toString();
             Pattern pattern = Pattern.compile("\\{window\\.cdc.*?;\\}");
             Matcher matcher = pattern.matcher(content);
-            if(matcher.find()){
+            if (matcher.find()) {
                 String group = matcher.group();
-                StringBuilder newTarget = new StringBuilder("{console.log(\"undetected chromedriver 1337!\"}");
+                StringBuilder newTarget =
+                        new StringBuilder("{console.log(\"undetected chromedriver 1337!\"}");
                 int k = group.length() - newTarget.length();
                 for (int i = 0; i < k; i++) {
                     newTarget.append(" ");
@@ -88,13 +88,13 @@ public class Patcher {
                 file.write(newContent.getBytes(StandardCharsets.ISO_8859_1));
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(file!=null){
+        } finally {
+            if (file != null) {
                 try {
                     file.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -120,10 +120,9 @@ public class Patcher {
 
          */
         char[] cdc = new char[27];
-        for(int i=0;i<27;i++){
+        for (int i = 0; i < 27; i++) {
             cdc[i] = chars.charAt(random.nextInt(chars.length()));
         }
         return new String(cdc);
     }
-
 }

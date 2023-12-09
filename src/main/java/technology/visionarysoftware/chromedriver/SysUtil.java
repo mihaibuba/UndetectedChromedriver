@@ -1,4 +1,4 @@
-package com.frogking.chromedriver;
+package technology.visionarysoftware.chromedriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +47,7 @@ public class SysUtil {
      * get env PATH
      * @return PATHs
      */
-    public static List<String> getPath(){
+    public static List<String> getPath() {
         String sep = System.getProperty("path.separator");
         String paths = System.getenv("PATH");
         return new ArrayList<>(Arrays.asList(paths.split(sep)));
@@ -58,8 +58,7 @@ public class SysUtil {
      * @param key PATH key
      * @return PATH value
      */
-    public static String getString(String key){
+    public static String getString(String key) {
         return System.getenv(key);
     }
-
 }
